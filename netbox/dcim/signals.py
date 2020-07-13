@@ -80,6 +80,11 @@ def update_connected_endpoints(instance, **kwargs):
             endpoint_b.connected_endpoint = endpoint_a
             endpoint_b.connection_status = path_status
             endpoint_b.save()
+        elif endpoint_b is None:
+            # There is no endpoint, so clean up any left overs
+            endpoint_a.connected_endpoint = None
+            endpoint_a.connection_status = path_status
+            endpoint_a.save()
 
 
 @receiver(pre_delete, sender=Cable)
