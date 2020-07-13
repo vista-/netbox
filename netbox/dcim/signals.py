@@ -36,6 +36,8 @@ def update_connected_endpoints(instance, **kwargs):
     """
     When a Cable is saved, check for and update its two connected endpoints
     """
+    from circuits.models import CircuitTermination
+
     logger = logging.getLogger('netbox.dcim.cable')
 
     # Cache the Cable on its two termination points
@@ -60,7 +62,13 @@ def update_connected_endpoints(instance, **kwargs):
                 break
 
         endpoint_a = path[0][0]
-        endpoint_b = path[-1][2] if not split_ends and not position_stack else None
+        if not split_ends and not position_stack:
+            endpoint_b = path[-1][2]
+            if endpoint_b is None and len(path) >= 2 and isinstance(path[-2][2], CircuitTermination):
+                # Simulate the previous behaviour and use the circuit termination as connected endpoint
+                endpoint_b = path[-2][2]
+        else:
+            endpoint_b = None
 
         # Patch panel ports are not connected endpoints, all other cable terminations are
         if isinstance(endpoint_a, CableTermination) and not isinstance(endpoint_a, (FrontPort, RearPort)) and \
