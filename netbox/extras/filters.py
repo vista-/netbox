@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
-from dcim.models import DeviceRole, Platform, Region, Site
+from dcim.models import DeviceRole, DeviceType, Platform, Region, Site
 from tenancy.models import Tenant, TenantGroup
 from utilities.filters import BaseFilterSet
 from virtualization.models import Cluster, ClusterGroup
@@ -180,6 +180,17 @@ class ConfigContextFilterSet(BaseFilterSet):
         queryset=Platform.objects.all(),
         to_field_name='slug',
         label='Platform (slug)',
+    )
+    device_type_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='device_types',
+        queryset=DeviceType.objects.all(),
+        label='Device Type',
+    )
+    device_type = django_filters.ModelMultipleChoiceFilter(
+        field_name='device_types__slug',
+        queryset=DeviceType.objects.all(),
+        to_field_name='slug',
+        label='Device Type (slug)',
     )
     cluster_group_id = django_filters.ModelMultipleChoiceFilter(
         field_name='cluster_groups',

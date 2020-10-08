@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from dcim.models import DeviceRole, Platform, Rack, Region, Site
+from dcim.models import DeviceRole, DeviceType, Platform, Rack, Region, Site
 from extras.choices import *
 from extras.filters import *
 from extras.utils import FeatureQuery
@@ -193,6 +193,13 @@ class ConfigContextTestCase(TestCase):
         )
         Platform.objects.bulk_create(platforms)
 
+        device_types = (
+            DeviceType(name='Device Type 1', slug='device-type-1'),
+            DeviceType(name='Device Type 2', slug='device-type-2'),
+            DeviceType(name='Device Type 3', slug='device-type-3'),
+        )
+        DeviceType.objects.bulk_create(platforms)
+
         cluster_groups = (
             ClusterGroup(name='Cluster Group 1', slug='cluster-group-1'),
             ClusterGroup(name='Cluster Group 2', slug='cluster-group-2'),
@@ -234,6 +241,7 @@ class ConfigContextTestCase(TestCase):
             c.sites.set([sites[i]])
             c.roles.set([device_roles[i]])
             c.platforms.set([platforms[i]])
+            c.device_types.set([device_types[i]])
             c.cluster_groups.set([cluster_groups[i]])
             c.clusters.set([clusters[i]])
             c.tenant_groups.set([tenant_groups[i]])
@@ -279,6 +287,13 @@ class ConfigContextTestCase(TestCase):
         params = {'platform_id': [platforms[0].pk, platforms[1].pk]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
         params = {'platform': [platforms[0].slug, platforms[1].slug]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_device_type(self):
+        device_types = DeviceType.objects.all()[:2]
+        params = {'device_type_id': [device_types[0].pk, device_types[1].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+        params = {'device_type': [device_types[0].slug, device_types[1].slug]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_cluster_group(self):

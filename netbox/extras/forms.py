@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 
-from dcim.models import DeviceRole, Platform, Region, Site
+from dcim.models import DeviceRole, DeviceType, Platform, Region, Site
 from tenancy.models import Tenant, TenantGroup
 from utilities.forms import (
     add_blank_choice, APISelectMultiple, BootstrapMixin, BulkEditForm, BulkEditNullBooleanSelect, ColorSelect,
@@ -237,6 +237,11 @@ class ConfigContextForm(BootstrapMixin, forms.ModelForm):
         queryset=Platform.objects.all(),
         required=False
     )
+    device_types = DynamicModelMultipleChoiceField(
+        queryset=DeviceType.objects.all(),
+        display_field='model',
+        required=False
+    )
     cluster_groups = DynamicModelMultipleChoiceField(
         queryset=ClusterGroup.objects.all(),
         required=False
@@ -264,8 +269,8 @@ class ConfigContextForm(BootstrapMixin, forms.ModelForm):
     class Meta:
         model = ConfigContext
         fields = (
-            'name', 'weight', 'description', 'is_active', 'regions', 'sites', 'roles', 'platforms', 'cluster_groups',
-            'clusters', 'tenant_groups', 'tenants', 'tags', 'data',
+            'name', 'weight', 'description', 'is_active', 'regions', 'sites', 'roles', 'platforms', 'device_types',
+            'cluster_groups', 'clusters', 'tenant_groups', 'tenants', 'tags', 'data',
         )
 
 
@@ -315,6 +320,11 @@ class ConfigContextFilterForm(BootstrapMixin, forms.Form):
     )
     platform = DynamicModelMultipleChoiceField(
         queryset=Platform.objects.all(),
+        to_field_name='slug',
+        required=False
+    )
+    device_type = DynamicModelMultipleChoiceField(
+        queryset=DeviceType.objects.all(),
         to_field_name='slug',
         required=False
     )

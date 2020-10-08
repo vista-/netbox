@@ -146,6 +146,20 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Device Types</td>
+                        <td>
+                            {% if configcontext.device_types.all %}
+                                <ul>
+                                    {% for device_type in configcontext.device_types.all %}
+                                        <li><a href="{{ device_type.get_absolute_url }}">{{ device_type }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Cluster Groups</td>
                         <td>
                             {% if configcontext.cluster_groups.all %}

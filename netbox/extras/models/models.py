@@ -475,6 +475,11 @@ class ConfigContext(ChangeLoggedModel):
         related_name='+',
         blank=True
     )
+    device_types = models.ManyToManyField(
+        to='dcim.DeviceType',
+        related_name='+',
+        blank=True
+    )
     cluster_groups = models.ManyToManyField(
         to='virtualization.ClusterGroup',
         related_name='+',

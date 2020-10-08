@@ -50,6 +50,7 @@ class ConfigContextQuerySet(RestrictedQuerySet):
             Q(sites=obj.site) | Q(sites=None),
             Q(roles=role) | Q(roles=None),
             Q(platforms=obj.platform) | Q(platforms=None),
+            Q(device_types=obj.device_type) | Q(device_types=None),
             Q(cluster_groups=cluster_group) | Q(cluster_groups=None),
             Q(clusters=cluster) | Q(clusters=None),
             Q(tenant_groups=tenant_group) | Q(tenant_groups=None),

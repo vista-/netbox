@@ -10,7 +10,7 @@ from django_rq.queues import get_connection
 from django_tables2 import RequestConfig
 from rq import Worker
 
-from dcim.models import DeviceRole, Platform, Region, Site
+from dcim.models import DeviceRole, DeviceType, Platform, Region, Site
 from tenancy.models import Tenant, TenantGroup
 from utilities.forms import ConfirmationForm
 from utilities.paginator import EnhancedPaginator
@@ -93,6 +93,7 @@ class ConfigContextView(ObjectView):
             Prefetch('sites', queryset=Site.objects.restrict(request.user)),
             Prefetch('roles', queryset=DeviceRole.objects.restrict(request.user)),
             Prefetch('platforms', queryset=Platform.objects.restrict(request.user)),
+            Prefetch('device_types', queryset=DeviceType.objects.restrict(request.user)),
             Prefetch('clusters', queryset=Cluster.objects.restrict(request.user)),
             Prefetch('cluster_groups', queryset=ClusterGroup.objects.restrict(request.user)),
             Prefetch('tenants', queryset=Tenant.objects.restrict(request.user)),

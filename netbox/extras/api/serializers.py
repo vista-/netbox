@@ -4,10 +4,10 @@ from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
 from dcim.api.nested_serializers import (
-    NestedDeviceSerializer, NestedDeviceRoleSerializer, NestedPlatformSerializer, NestedRackSerializer,
-    NestedRegionSerializer, NestedSiteSerializer,
+    NestedDeviceSerializer, NestedDeviceRoleSerializer, NestedDeviceTypeSerializer, NestedPlatformSerializer,
+    NestedRackSerializer, NestedRegionSerializer, NestedSiteSerializer,
 )
-from dcim.models import Device, DeviceRole, Platform, Rack, Region, Site
+from dcim.models import Device, DeviceRole, DeviceType, Platform, Rack, Region, Site
 from extras.choices import *
 from extras.models import (
     ConfigContext, ExportTemplate, Graph, ImageAttachment, ObjectChange, JobResult, Tag,
@@ -208,6 +208,12 @@ class ConfigContextSerializer(ValidatedModelSerializer):
         required=False,
         many=True
     )
+    device_types = SerializedPKRelatedField(
+        queryset=DeviceType.objects.all(),
+        serializer=NestedDeviceTypeSerializer,
+        required=False,
+        many=True
+    )
     cluster_groups = SerializedPKRelatedField(
         queryset=ClusterGroup.objects.all(),
         serializer=NestedClusterGroupSerializer,
@@ -243,7 +249,8 @@ class ConfigContextSerializer(ValidatedModelSerializer):
         model = ConfigContext
         fields = [
             'id', 'url', 'name', 'weight', 'description', 'is_active', 'regions', 'sites', 'roles', 'platforms',
-            'cluster_groups', 'clusters', 'tenant_groups', 'tenants', 'tags', 'data', 'created', 'last_updated',
+            'device_type', 'cluster_groups', 'clusters', 'tenant_groups', 'tenants', 'tags', 'data', 'created',
+            'last_updated',
         ]
 
 

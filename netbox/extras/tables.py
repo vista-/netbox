@@ -85,7 +85,7 @@ class ConfigContextTable(BaseTable):
         model = ConfigContext
         fields = (
             'pk', 'name', 'weight', 'is_active', 'description', 'regions', 'sites', 'roles', 'platforms',
-            'cluster_groups', 'clusters', 'tenant_groups', 'tenants',
+            'device_types', 'cluster_groups', 'clusters', 'tenant_groups', 'tenants',
         )
         default_columns = ('pk', 'name', 'weight', 'is_active', 'description')
 
